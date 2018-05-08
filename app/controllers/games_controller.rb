@@ -1,36 +1,25 @@
 class GamesController < ApplicationController
   # Add your GamesController code here
-  before_action :get_game, only: [:show, :update]
-  before_action :all_games, only: :index
-
-  def index
-    render json: @games
-  end
 
   def create
-    @game = Game.create(game_params)
-      render json: @game
+    @game = Game.create(state: params[:state])
+    render json: @game
   end
 
   def show
+    @game = Game.find(params[:id])
     render json: @game
   end
 
   def update
-    @game.update(game_params)
+    @game = Game.find(params[:id])
+    @game.update(state: params[:state])
     render json: @game
   end
 
-  private
-  def game_params
-    params.permit(:state => [])
-  end
-
-  def get_game
-    @game = Game.find_by(id: params[:id])
-  end
-
-  def all_games
+  def index
     @games = Game.all
+    render json: @games
   end
+
 end
